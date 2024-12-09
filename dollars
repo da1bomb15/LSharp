@@ -1,0 +1,32 @@
+import yfinance as yf
+import matplotlib.pyplot as plt
+
+# Download the last 5 years of data for AUD/USD, NZD/USD, and USD/CAD
+audusd = yf.download('AUDUSD=X', period='5y')
+nzdusd = yf.download('NZDUSD=X', period='5y')
+usdcad = yf.download('CAD=X', period='5y')  # USD/CAD is quoted as CAD=X
+
+# Invert the USD/CAD to get CAD/USD
+usdcad['CADUSD'] = 1 / usdcad['Close']
+
+# Plot the data
+plt.figure(figsize=(10, 6))
+
+# Plot AUD/USD
+plt.plot(audusd.index, audusd['Close'], label='AUD/USD', color='blue')
+
+# Plot NZD/USD
+plt.plot(nzdusd.index, nzdusd['Close'], label='NZD/USD', color='green')
+
+# Plot CAD/USD (inverted from USD/CAD)
+plt.plot(usdcad.index, usdcad['CADUSD'], label='CAD/USD', color='red')
+
+# Add labels and title
+plt.title('Comparison of AUD/USD, NZD/USD, and CAD/USD over the last 5 years')
+plt.xlabel('Date')
+plt.ylabel('Exchange Rate')
+plt.legend(loc='best')
+
+# Display the plot
+plt.grid(True)
+plt.show()
